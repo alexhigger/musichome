@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzh.springbootmusichome.Dao.MyDao">
+    <select id="findMys" parameterType="com.wzh.springbootmusichome.Entity.My" resultType="com.wzh.springbootmusichome.Entity.My">
+        select * from my
+        <where>
+            <if test="name != null and name != '' ">
+                <bind name="name" value=" '%' + name + '%' "/>
+                and name like #{name}
+            </if>
+            <if test="author != null and author != '' ">
+                <bind name="author" value=" '%' + author + '%' "/>
+                and author like #{author}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMyById" parameterType="Integer" resultType="com.wzh.springbootmusichome.Entity.My">
+        select * from my where id=#{id}
+    </select>
+
+    <!--<resultMap id="resultMap" type="com.wzh.springbootmusichome.Entity.MyImg">-->
+        <!--<id property="id" column="id"/>-->
+        <!--<result property="url" column="url"/>-->
+        <!--<result property="myid" column="myid"/>-->
+    <!--</resultMap>-->
+    <select id="getURLById" parameterType="Integer" resultType="com.wzh.springbootmusichome.Entity.MyImg">
+        select url from myimg where myid=#{myid}
+    </select>
+
+
+
+    <insert id="addMys" parameterType="com.wzh.springbootmusichome.Entity.My" >
+    INSERT INTO `my` ( `name`,  `author`, `btype`, `stype`)
+    VALUES (  #{name},  #{author}, #{btype}, #{stype});
+    </insert>
+
+
+    <delete id="deleteMyById">
+    delete from my where id=#{id}
+    </delete>
+
+    <update id="updateMy" parameterType="com.wzh.springbootmusichome.Entity.My">
+        UPDATE `my`
+         SET
+        `name`=  #{name},
+         `author`=#{author},
+         `btype`= #{btype},
+          `stype`= #{stype}
+          WHERE `id`=#{id};
+    </update>
+
+
+    <!--<update id="updateIMG">-->
+        <!--update my set img = #{url} where id=#{id};-->
+    <!--</update>-->
+
+    <!--更新操作1 先把该id的所有图都删除-->
+    <delete id="deleteUrlByMyId">
+        delete from myimg where myid=#{myid}
+    </delete>
+
+    <insert id="insertIMG"  >
+    INSERT INTO `myimg` (id ,`url`,  `myid`)
+    VALUES (  null,#{url},  #{myid});
+    </insert>
+
+</mapper>
